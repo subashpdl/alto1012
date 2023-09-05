@@ -1,47 +1,59 @@
-import java.util.Stack; // Import the Stack class from java.util
+import java.util.EmptyStackException;
 
-public class StackExample {
-    // Pushing element on the top of the stack
-    static void stack_push(Stack<Integer> stack) {
-        for (int i = 0; i < 5; i++) {
-            stack.push(i);
+class Stack<T> {
+    private Node<T> top;
+    
+    private static class Node<T> {
+        private T data;
+        private Node<T> next;
+        
+        public Node(T data) {
+            this.data = data;
         }
     }
-
-    // Popping element from the top of the stack
-    static void stack_pop(Stack<Integer> stack) {
-        System.out.println("Pop Operation:");
-
-        for (int i = 0; i < 5; i++) {
-            Integer y = stack.pop(); // No need to cast to Integer
-            System.out.println(y);
+    
+    public boolean isEmpty() {
+        return top == null;
+    }
+    
+    public void push(T data) {
+        Node<T> newNode = new Node<>(data);
+        newNode.next = top;
+        top = newNode;
+    }
+    
+    public T pop() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
         }
+        T data = top.data;
+        top = top.next;
+        return data;
     }
-
-    // Displaying element on the top of the stack
-    static void stack_peek(Stack<Integer> stack) {
-        Integer element = stack.peek();
-        System.out.println("Element on stack top: " + element);
+    
+    public T peek() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
+        return top.data;
     }
+}
 
-    // Searching element in the stack
-    static void stack_search(Stack<Integer> stack, int element) {
-        int pos = stack.search(element); // No need to cast to Integer
-
-        if (pos == -1)
-            System.out.println("Element not found");
-        else
-            System.out.println("Element is found at position: " + pos);
-    }
-
+public class Main {
     public static void main(String[] args) {
-        Stack<Integer> stack = new Stack<Integer>();
-
-        stack_push(stack);
-        stack_pop(stack);
-        stack_push(stack);
-        stack_peek(stack);
-        stack_search(stack, 2);
-        stack_search(stack, 6);
+        Stack<Integer> stack = new Stack<>();
+        
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        
+        System.out.println("Peek: " + stack.peek()); // Should print "Peek: 3"
+        
+        System.out.println("Pop: " + stack.pop());   // Should print "Pop: 3"
+        System.out.println("Pop: " + stack.pop());   // Should print "Pop: 2"
+        
+        stack.push(4);
+        
+        System.out.println("Peek: " + stack.peek()); // Should print "Peek: 4"
     }
 }
