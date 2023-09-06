@@ -1,68 +1,82 @@
 import java.util.EmptyStackException;
 
-public class SimpleStack {
+interface Stack {
+    Object push(Object item);
+    Object pop();
+    Object peek();
+    int size();
+}
+
+class SimpleStack implements Stack {
     private Node top;
+    private int count;
 
     private class Node {
-        int data;
+        Object data;
         Node next;
 
-        Node(int data) {
+        Node(Object data) {
             this.data = data;
             this.next = null;
         }
     }
 
-    public boolean isEmpty() {
-        return top == null;
+    public SimpleStack() {
+        this.top = null;
+        this.count = 0;
     }
 
-    public void push(int data) {
-        Node newNode = new Node(data);
+    @Override
+    public Object push(Object item) {
+        Node newNode = new Node(item);
         newNode.next = top;
         top = newNode;
+        count++;
+        return item;
     }
 
-    public int pop() {
+    @Override
+    public Object pop() {
         if (isEmpty()) {
             throw new EmptyStackException();
         }
-        int data = top.data;
+        Object data = top.data;
         top = top.next;
+        count--;
         return data;
     }
 
-    public int peek() {
+    @Override
+    public Object peek() {
         if (isEmpty()) {
             throw new EmptyStackException();
         }
         return top.data;
     }
 
-    public void printStack() {
-        Node current = top;
-        System.out.print("Stack: ");
-        while (current != null) {
-            System.out.print(current.data + " ");
-            current = current.next;
-        }
-        System.out.println();
+    @Override
+    public int size() {
+        return count;
+    }
+
+    public boolean isEmpty() {
+        return top == null;
     }
 
     public static void main(String[] args) {
-        SimpleStack stack = new SimpleStack();
+        Stack stack = new SimpleStack();
 
         stack.push(1);
         stack.push(2);
         stack.push(3);
 
-        stack.printStack();
+        System.out.println("Stack size: " + stack.size());
 
         System.out.println("Peek: " + stack.peek());
 
         System.out.println("Pop: " + stack.pop());
         System.out.println("Pop: " + stack.pop());
 
-        stack.printStack();
+        System.out.println("Stack size after pops: " + stack.size());
     }
 }
