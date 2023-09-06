@@ -1,67 +1,68 @@
-import java.util.NoSuchElementException;
+import java.util.EmptyStackException;
 
-class Stack{
-    protected int arr[];
-    protected int size;
-    protected int top;
-        public Stack(int n){
-            size=n;
-            arr=new int[n];
-            top=-1;
-        }
-        
-        boolean isEmpty(){
-            return top==-1;
-        }
-        
-        void Push(int x){
-            if(top>=size-1){
-                throw new IndexOutOfBoundsException("Overflow Exception");
-            }
-            top++;
-            arr[top]=x;
-        }
-        
-        void Pop(){
-           if(isEmpty()){
-               throw new NoSuchElementException("Underflow Exception");
-           }
-           else{
-           top--;
-           }
-        }
-        int Top(){
-            if(isEmpty()){
-                throw new NoSuchElementException("Underflow Exception");
-            }
-            else
-                return arr[top];
-        }
-        
-        void display(){
-            if(isEmpty()){
-            System.out.print("Empty");
-            }
-            else{
-                for(int i=0;i<=top;i++){
-                    System.out.print(arr[i]+"\t");
-                }
-            }
-        }
-        
-}
+public class SimpleStack {
+    private Node top;
 
-public class Reverse {
-        public static void main(String[] args){
-            Stack s=new Stack(5);
-                s.Push(4);
-                s.Push(6);
-                s.Push(5);
-                s.Push(8);
-                s.Push(9);
-                s.Pop();
-                s.display();
-                
-        }    
-   
+    private class Node {
+        int data;
+        Node next;
+
+        Node(int data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
+    public boolean isEmpty() {
+        return top == null;
+    }
+
+    public void push(int data) {
+        Node newNode = new Node(data);
+        newNode.next = top;
+        top = newNode;
+    }
+
+    public int pop() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
+        int data = top.data;
+        top = top.next;
+        return data;
+    }
+
+    public int peek() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
+        return top.data;
+    }
+
+    public void printStack() {
+        Node current = top;
+        System.out.print("Stack: ");
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        SimpleStack stack = new SimpleStack();
+
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+
+        stack.printStack();
+
+        System.out.println("Peek: " + stack.peek());
+
+        System.out.println("Pop: " + stack.pop());
+        System.out.println("Pop: " + stack.pop());
+
+        stack.printStack();
+    }
 }
